@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "58686:58686"
+      - "8404:8404"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./errors:/etc/haproxy/errors
+      - /run/haproxy:/run/haproxy
+      - /var/lib/haproxy:/var/lib/haproxy
+    restart: unless-stopped
+    networks:
+      - app_network
+
+  haproxy_alt:
+    image: haproxy:latest
+    container_name: haproxy_alt
+    ports:
+      - "58787:58787"
+      - "8405:8404"
+    volumes:
+      - ./haproxy_alt.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./errors:/etc/haproxy/errors
+      - /run/haproxy:/run/haproxy
+      - /var/lib/haproxy:/var/lib/haproxy
+    restart: unless-stopped
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
